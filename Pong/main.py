@@ -10,6 +10,9 @@ from random import randint, random
 
 class PongPaddle(Widget):
     score = NumericProperty(0)
+    velocity_x = NumericProperty(0)
+    velocity_y = NumericProperty(0)
+    velocity = ReferenceListProperty(velocity_x, velocity_y)
     
     def bounce_ball(self, ball):
         if self.collide_widget(ball):
@@ -19,6 +22,8 @@ class PongPaddle(Widget):
             vel = bounced * 1.1
             ball.velocity = vel.x, vel.y + offset   
 
+    def move(self):
+        self.pos = Vector(*self.velocity) + self.pos
 
 class PongBall(Widget):
     velocity_x = NumericProperty(0)
@@ -42,7 +47,8 @@ class PongGame(Widget):
         
     def update(self, *args):
         self.ball.move()
-        self.player1.center_y = self.ball.y
+        self.player1.velocity_y = self.ball.velocity_y / 2
+        self.player1.move()
         #bounce of paddles
         self.player1.bounce_ball(self.ball)
         self.player2.bounce_ball(self.ball)
@@ -60,9 +66,11 @@ class PongGame(Widget):
         if self.ball.x < self.x:
             self.player2.score += 1
             self.serve_ball(vel=self.velo)
+            self.player1.center_y = self.center_y
         if self.ball.x > self.width:
             self.player1.score += 1
             self.serve_ball(vel=self.revel)
+            self.player1.center_y = self.center_y
             
             
     def on_touch_move(self, touch):
