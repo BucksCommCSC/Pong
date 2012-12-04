@@ -33,14 +33,16 @@ class PongGame(Widget):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
+    velo = (8,0)
+    revel = (-8,0)
 
-    def serve_ball(self, vel=(4,0)):
+    def serve_ball(self, vel=velo):
         self.ball.center = self.center
         self.ball.velocity = vel
         
     def update(self, *args):
         self.ball.move()
-        
+        self.player1.center_y = self.ball.y
         #bounce of paddles
         self.player1.bounce_ball(self.ball)
         self.player2.bounce_ball(self.ball)
@@ -49,18 +51,23 @@ class PongGame(Widget):
         if (self.ball.y < self.y) or (self.ball.top > self.top):
             self.ball.velocity_y *= -1
 
+        if (self.ball.velocity_x > 48.0):
+            self.ball.velocity_x = 47.9
+        if (self.ball.velocity_x < -48.0):
+            self.ball.velocity_x = -47.9
+        
         #went of to a side to score point?
         if self.ball.x < self.x:
             self.player2.score += 1
-            self.serve_ball(vel=(4,0))
+            self.serve_ball(vel=self.velo)
         if self.ball.x > self.width:
             self.player1.score += 1
-            self.serve_ball(vel=(-4,0))
+            self.serve_ball(vel=self.revel)
             
             
     def on_touch_move(self, touch):
-        if touch.x < self.width/3:
-            self.player1.center_y = touch.y
+        #if touch.x < self.width/3:
+            #self.player1.center_y = touch.y
         if touch.x > self.width - self.width/3:
             self.player2.center_y = touch.y
 

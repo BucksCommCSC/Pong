@@ -35,7 +35,13 @@
         center_x: root.width * 3 / 4
         top: root.top - 50
         text: str(root.player2.score)
-    
+
+    Label:
+        font_size: 12
+        center_x: root.width * 1 / 5
+        top: root.top - 50
+        text: str(root.ball.velocity_x)
+        
     PongBall:
         id: pong_ball
         center: self.parent.center
