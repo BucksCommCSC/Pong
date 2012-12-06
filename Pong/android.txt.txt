@@ -1,3 +1,0 @@
-title="Pong"
-author="Charles Kiorpes"
-orientation="landscape"
