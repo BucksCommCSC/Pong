@@ -57,10 +57,10 @@ class PongGame(Widget):
         if (self.ball.y < self.y) or (self.ball.top > self.top):
             self.ball.velocity_y *= -1
 
-        if (self.ball.velocity_x > 48.0):
-            self.ball.velocity_x = 47.9
-        if (self.ball.velocity_x < -48.0):
-            self.ball.velocity_x = -47.9
+        if (self.ball.velocity_x > 43.0):
+            self.ball.velocity_x = 42.9
+        if (self.ball.velocity_x < -43.0):
+            self.ball.velocity_x = -42.9
         
         #went of to a side to score point?
         if self.ball.x < self.x:
