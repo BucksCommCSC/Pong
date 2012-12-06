@@ -17,7 +17,7 @@ class PongPaddle(Widget):
     def bounce_ball(self, ball):
         if self.collide_widget(ball):
             vx, vy = ball.velocity
-            offset = (ball.center_y-self.center_y)/(self.height/2)
+            offset = (ball.center_y-self.center_y)/(self.height/4)
             bounced = Vector(-1*vx, vy)
             vel = bounced * 1.1
             ball.velocity = vel.x, vel.y + offset   
@@ -47,11 +47,20 @@ class PongGame(Widget):
         
     def update(self, *args):
         self.ball.move()
-        self.player1.velocity_y = self.ball.velocity_y / 2
-        self.player1.move()
-        #bounce of paddles
+
+        #bounce off paddles
         self.player1.bounce_ball(self.ball)
         self.player2.bounce_ball(self.ball)
+        
+        #stop the ball in case the position is within bounds
+        self.player1.velocity_y = 0
+        
+        #start player1 moving once ball is far enough away from paddle center
+        if (self.ball.y - self.player1.center_y > 70) or (self.ball.y - self.player1.center_y < -70):
+            self.player1.velocity_y = self.ball.velocity_y / 1.3
+        
+        #update paddle position
+        self.player1.move()
         
         #bounce ball off bottom or top
         if (self.ball.y < self.y) or (self.ball.top > self.top):
@@ -62,7 +71,7 @@ class PongGame(Widget):
         if (self.ball.velocity_x < -43.0):
             self.ball.velocity_x = -42.9
         
-        #went of to a side to score point?
+        #went off to a side to score point?
         if self.ball.x < self.x:
             self.player2.score += 1
             self.serve_ball(vel=self.velo)
