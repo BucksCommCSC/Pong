@@ -1,3 +1,3 @@
 title=Pong
-author=Resba
+author=resbaandkiorpesc
 orientation=landscape
